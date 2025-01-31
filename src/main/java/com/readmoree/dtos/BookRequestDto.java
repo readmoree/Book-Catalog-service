@@ -1,6 +1,7 @@
 package com.readmoree.dtos;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import com.readmoree.entities.Binding;
 import com.readmoree.entities.Language;
@@ -16,6 +17,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class BookRequestDto {
 	
 	@Size(min = 13, max = 13, message = "Invalid isbn length!")
@@ -47,6 +49,8 @@ public class BookRequestDto {
 	
 	@NotNull(message="Publisher id must not be null")
 	private Long publisherId;
+	
+	private List<BookMappingRequestDto> bookMappings;
 	
 
 }

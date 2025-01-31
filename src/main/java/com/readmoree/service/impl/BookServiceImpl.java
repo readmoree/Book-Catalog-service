@@ -11,13 +11,18 @@ import com.readmoree.dao.AuthorDao;
 import com.readmoree.dao.BookDao;
 import com.readmoree.dao.PublisherDao;
 import com.readmoree.dtos.ApiResponse;
+import com.readmoree.dtos.BookFilterRequestDto;
+import com.readmoree.dtos.BookFilterResponseDTO;
 import com.readmoree.dtos.BookRequestDto;
 import com.readmoree.dtos.BookResponseDto;
 import com.readmoree.entities.Author;
 import com.readmoree.entities.Book;
+import com.readmoree.entities.BooksMapping;
+import com.readmoree.entities.BooksMappingId;
 import com.readmoree.entities.Publisher;
 import com.readmoree.exception.ResourceNotFoundException;
 import com.readmoree.service.BookService;
+import com.readmoree.dao.BooksMappingDao;
 
 import lombok.AllArgsConstructor;
 
@@ -34,6 +39,8 @@ public class BookServiceImpl implements BookService {
 
 	private PublisherDao publisherDao;
 
+	private BooksMappingDao booksMappingDao;
+
 	@Override
 	public ApiResponse addBook(Long userId, BookRequestDto bookDto) {
 		//validate if userId is of admin
@@ -49,6 +56,24 @@ public class BookServiceImpl implements BookService {
 			Publisher publisher = publisherDao.findById(bookDto.getPublisherId()).orElseThrow(()->new ResourceNotFoundException("invalid publisher id"));
 			book.setPublisher(publisher);
 			Book addedBook = bookDao.save(book);
+
+			// Create and save book mappings
+
+			List<BooksMapping> mappings = bookDto.getBookMappings().stream()
+				    .map(mappingRequest -> {
+				        BooksMapping mapping = new BooksMapping();
+				        mapping.setId(new BooksMappingId(
+				            addedBook.getId(),
+				            mappingRequest.getLabels(),
+				            mappingRequest.getCategory(),
+				            mappingRequest.getSubCategory()
+				        ));
+				        mapping.setBook(addedBook);
+				        return mapping;
+				    })
+				    .collect(Collectors.toList());
+
+			booksMappingDao.saveAll(mappings);
 
 			//convert to dto
 			BookResponseDto bookRequestDto = modelMapper.map(addedBook, BookResponseDto.class);
@@ -128,6 +153,50 @@ public class BookServiceImpl implements BookService {
 		return allBooks.stream()
 				.map(book -> modelMapper.map(book, BookResponseDto.class))
 				.collect(Collectors.toList());
+	}
+
+	@Override
+	public BookFilterResponseDTO filterBooks(BookFilterRequestDto filterRequest) {
+		List<Book> books =  bookDao.filterBooks(
+                filterRequest.getLabels(),
+                filterRequest.getCategory(),
+                filterRequest.getSubCategory());
+		 
+		// Convert books to DTO format
+		List<BookResponseDto> bookList = books.stream()
+			    .map(book -> new BookResponseDto(
+			        book.getIsbn(),
+			        book.getTitle(),
+			        book.getAuthor(),
+			        book.getPublisher(),
+			        book.getPrice(),
+			        book.getLanguage(),
+			        book.getDiscount()
+			    ))
+			    .collect(Collectors.toList());
+	        
+	     // Extract unique authors, publishers, and languages
+	        List<String> authors = books.stream()
+	                .map(book -> book.getAuthor().getFirstName() + " " + book.getAuthor().getLastName())
+	                .distinct()
+	                .collect(Collectors.toList());
+
+	        List<String> publishers = books.stream()
+	                .map(book -> book.getPublisher().getName())
+	                .distinct()
+	                .collect(Collectors.toList());
+
+	        List<String> languages = books.stream()
+	                .map(book -> book.getLanguage().name())  // Convert Enum to String
+	                .distinct()
+	                .collect(Collectors.toList());
+
+	        return BookFilterResponseDTO.builder()
+	                .books(bookList)
+	                .authors(authors)
+	                .publishers(publishers)
+	                .languages(languages)
+	                .build();
 	}
 
 }

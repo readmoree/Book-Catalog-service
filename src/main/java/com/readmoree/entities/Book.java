@@ -1,6 +1,7 @@
 package com.readmoree.entities;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -10,6 +11,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.*;
 
@@ -62,5 +64,10 @@ public class Book extends BaseEntity {
 	//for soft delete
 	@Column(name="is_available",nullable = false, length=2)
 	private boolean isAvailable;
+
+	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<BooksMapping> booksMappings;
+	
+	private double discount;
 	
 }

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.readmoree.dtos.ApiResponse;
+import com.readmoree.dtos.BookFilterRequestDto;
+import com.readmoree.dtos.BookFilterResponseDTO;
 import com.readmoree.dtos.BookRequestDto;
 import com.readmoree.dtos.BookResponseDto;
 import com.readmoree.service.BookService;
@@ -21,6 +23,7 @@ import lombok.AllArgsConstructor;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -153,6 +156,15 @@ public class BookController {
             return ResponseEntity.ok(books);
         }
     }
+
+	// Fetch books by label, category, subcategory
+	// Example Api call: /books/filter?category=Fiction&subCategory=Dystopian
+	
+	@GetMapping("/filter")
+	public ResponseEntity<BookFilterResponseDTO> filterBooks(@ModelAttribute BookFilterRequestDto filterRequest) {
+	 BookFilterResponseDTO books = bookService.filterBooks(filterRequest);
+		return ResponseEntity.ok(books);
+	}
 	
 	
 	

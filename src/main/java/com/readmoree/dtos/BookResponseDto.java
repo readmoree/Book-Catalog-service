@@ -12,6 +12,8 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class BookResponseDto extends BaseEntity {
 	
 	private String isbn;
@@ -33,4 +35,19 @@ public class BookResponseDto extends BaseEntity {
 	private Author author;
 
 	private Publisher publisher;
+	
+	private double discount;
+	
+	public BookResponseDto(String isbn,  String title, Author author, Publisher publisher, double price, Language language, double discount) {
+		this.isbn=isbn;
+		this.title=title;
+		this.author=(Author)author;
+		this.publisher=(Publisher)publisher;
+		this.price=price;
+		this.language=(Language)language;
+		this.discount=discount;
+		
+	}
+
+	
 }

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.readmoree.entities.Book;
+import com.readmoree.entities.Labels;
 
 public interface BookDao extends JpaRepository<Book, Long> {
 	
@@ -27,5 +28,17 @@ public interface BookDao extends JpaRepository<Book, Long> {
                             @Param("isbn") String isbn,
                             @Param("firstName") String firstName,
                             @Param("lastName") String lastName);
+	
+	@Query("SELECT DISTINCT b FROM Book b " +
+		       "JOIN b.booksMappings bm " +
+		       "WHERE (:labels IS NULL OR bm.id.labels = :labels) " +
+		       "AND (:category IS NULL OR bm.id.category = :category) " +
+		       "AND (:subCategory IS NULL OR bm.id.subCategory = :subCategory) ")
+		List<Book> filterBooks(
+		       @Param("labels") Labels labels, 
+		       @Param("category") String category,
+		       @Param("subCategory") String subCategory
+		);
+
 
 }
