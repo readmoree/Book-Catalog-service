@@ -43,6 +43,11 @@ public class BookServiceImpl implements BookService {
 		if(userId==1) {//suppose 1 belongs to admin
 			//convert dto to entity
 			Book book = modelMapper.map(bookDto, Book.class);
+			Author author = authorDao.findById(bookDto.getAuthorId()).orElseThrow(()->new ResourceNotFoundException("invalid author id"));
+			book.setAuthor(author);
+			
+			Publisher publisher = publisherDao.findById(bookDto.getPublisherId()).orElseThrow(()->new ResourceNotFoundException("invalid publisher id"));
+			book.setPublisher(publisher);
 			Book addedBook = bookDao.save(book);
 
 			//convert to dto
