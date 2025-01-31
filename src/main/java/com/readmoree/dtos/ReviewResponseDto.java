@@ -1,7 +1,5 @@
 package com.readmoree.dtos;
 
-import com.readmoree.entities.Book;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,12 +10,16 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ReviewResponseDto extends BaseEntity {
 	
-	private Long customerId;
+//	private Long customerId;
+
+	private Long bookid;
 	
-	private Book book;
+	private String bookTitle;
+	
+	private byte[] image;
 	
 	private String comment;
 	
 	private int rating;
-
+	
 }

@@ -33,6 +33,21 @@ public class ReviewServiceImpl implements ReviewService {
 	private Book validateBook(Long bookId) {
 		return bookDao.findById(bookId).orElseThrow(()-> new ResourceNotFoundException("Invalid book id"));
 	}
+	
+	private ReviewResponseDto convertToDto(Review review) {
+		ReviewResponseDto reviewResponseDto = new ReviewResponseDto();
+		reviewResponseDto.setBookid(review.getBook().getId());
+		reviewResponseDto.setBookTitle(review.getBook().getTitle());
+		reviewResponseDto.setId(review.getId());
+		reviewResponseDto.setComment(review.getComment());
+		reviewResponseDto.setCreatedOn(review.getCreatedOn());
+//		reviewResponseDto.setCustomerId(review.getCustomerId());
+		reviewResponseDto.setImage(review.getBook().getImage());
+		reviewResponseDto.setRating(review.getRating());
+		reviewResponseDto.setUpdatedOn(review.getUpdatedOn());
+		
+		return reviewResponseDto;
+	}
 
 	@Override
 	public ApiResponse addreview(Long userId, Long bookId, ReviewRequestDto reviewRequestDto) {
@@ -108,7 +123,7 @@ public class ReviewServiceImpl implements ReviewService {
 		
 
 		return reviewsByCustomerId.stream()
-				.map(review->modelMappper.map(review, ReviewResponseDto.class))
+				.map(review->convertToDto(review))
 				.collect(Collectors.toList());
 	}
 
@@ -123,7 +138,7 @@ public class ReviewServiceImpl implements ReviewService {
 		List<Review> reviews = reviewDao.findByCustomerIdAndBookId(userId, book);
 		
 		return  reviews.stream()
-				.map(review->modelMappper.map(review, ReviewResponseDto.class))
+				.map(review->convertToDto(review))
 				.collect(Collectors.toList());
 	}
 
@@ -136,7 +151,7 @@ public class ReviewServiceImpl implements ReviewService {
 		List<Review> reviewList = reviewDao.findByBook(book);
 		
 		return reviewList.stream()
-				.map(review->modelMappper.map(review, ReviewResponseDto.class))
+				.map(review->convertToDto(review))
 				.collect(Collectors.toList());
 	}
 

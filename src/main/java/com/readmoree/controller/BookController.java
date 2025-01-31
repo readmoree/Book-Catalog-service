@@ -31,9 +31,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/book")
 @AllArgsConstructor
 public class BookController {
-	
+
 	private BookService bookService;
-	
+
 	/**
 	 * get all books
 	 * user should be able to view all books
@@ -48,18 +48,25 @@ public class BookController {
 	@GetMapping("/all")
 	public ResponseEntity<?> getAllBooks(){
 		List<BookResponseDto> allBookList=bookService.getAllBooks();
-		
-		if (allBookList.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        } else {
-            return ResponseEntity.ok(allBookList);
-        }
+
+		return ResponseEntity.ok(allBookList);
+
 	}
-	
-	
-	
+
 	// get a particular book by id
-	
+	@GetMapping("/{bookId}")
+	public ResponseEntity<?> getBookById(@PathVariable Long bookId){
+		BookResponseDto book= bookService.getBookById(bookId);
+		return ResponseEntity.ok(book);
+	}
+
+	//get book list based on array of book ids
+	@GetMapping("/by-ids")
+	public ResponseEntity<?> getBookListByIdArray(@RequestParam List<Long> bookIds){
+		List<BookResponseDto> books = bookService.getBookListByIdArray(bookIds);
+		return ResponseEntity.ok(books);
+	}
+
 	// add a book
 	/**
 	 * Admin should be able to add book
@@ -72,16 +79,16 @@ public class BookController {
 	 * success - sc 201, created.
 	 * failure- SC 500
 	 */
-	
+
 	@PostMapping("/add/{userId}")
-	public ResponseEntity<?> addBookToInventory(@PathVariable Long userId, @RequestBody @Valid BookRequestDto bookDto){
+	public ResponseEntity<?> addBookToInventory(@PathVariable Integer userId, @RequestBody @Valid BookRequestDto bookDto){
 		try {
 			return ResponseEntity.ok(bookService.addBook(userId, bookDto));
 		}catch(RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage()));
 		}
 	}
-	
+
 	//delete a book
 	/**
 	 * admin should delete a book 
@@ -95,12 +102,12 @@ public class BookController {
 	 * failure - SC 404
 	 */
 	@DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteBook(@PathVariable Long id) {
-      
-            return ResponseEntity.ok(bookService.deleteBookById(id));
-   
-    }
-	
+	public ResponseEntity<?> deleteBook(@PathVariable Long id) {
+
+		return ResponseEntity.ok(bookService.deleteBookById(id));
+
+	}
+
 	// update details of a book
 	/**
 	 * admin should update book details
@@ -113,14 +120,14 @@ public class BookController {
 	 * success - SC 200, with response msg
 	 * failure - SC 500
 	 */
-	
+
 	@PutMapping("/update/{userId}/{bookId}")
 	public ResponseEntity<?> updateBook(@PathVariable Long userId, @PathVariable Long bookId, @RequestBody @Valid BookRequestDto bookDto){
-			return ResponseEntity.ok(bookService.updateBook(userId, bookId, bookDto));
-		
+		return ResponseEntity.ok(bookService.updateBook(userId, bookId, bookDto));
+
 	}
-	
-	
+
+
 	// find List of books by - author name, title, description, ISBN 
 	/**
 	 * user should be able to find List of books by author name, title, description, ISBN
@@ -133,43 +140,34 @@ public class BookController {
 	 * success - SC 200, with List of book/s
 	 * failure - SC 404
 	 */
-	
-	
+
 	@GetMapping("/search")
-    public ResponseEntity<?> searchBooks(
-    		@RequestParam(required = false) String title,
-            @RequestParam(required = false) String description,
-            @RequestParam(required = false) String isbn,
-            @RequestParam(required = false) String firstName,
-            @RequestParam(required = false) String lastName) {
-		
-		
-		System.out.println("Searching books with: " +
-	            "title=" + title + ", description=" + description +
-	            ", isbn=" + isbn + ", firstName=" + firstName + ", lastName=" + lastName);
+	public ResponseEntity<?> searchBooks(
+			@RequestParam(required = false) String title,
+			@RequestParam(required = false) String description,
+			@RequestParam(required = false) String isbn,
+			@RequestParam(required = false) String firstName,
+			@RequestParam(required = false) String lastName) {
 
-        List<BookResponseDto> books = bookService.searchBooks(title, description, isbn, firstName, lastName);
+		List<BookResponseDto> books = bookService.searchBooks(title, description, isbn, firstName, lastName);
 
-        if (books.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        } else {
-            return ResponseEntity.ok(books);
-        }
-    }
+		return ResponseEntity.ok(books);
+
+	}
 
 	// Fetch books by label, category, subcategory
 	// Example Api call: /books/filter?category=Fiction&subCategory=Dystopian
-	
+
 	@GetMapping("/filter")
 	public ResponseEntity<BookFilterResponseDTO> filterBooks(@ModelAttribute BookFilterRequestDto filterRequest) {
-	 BookFilterResponseDTO books = bookService.filterBooks(filterRequest);
+		BookFilterResponseDTO books = bookService.filterBooks(filterRequest);
 		return ResponseEntity.ok(books);
 	}
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
 }

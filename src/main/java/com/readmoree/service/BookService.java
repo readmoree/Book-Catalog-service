@@ -10,7 +10,7 @@ import com.readmoree.dtos.BookResponseDto;
 
 public interface BookService {
 
-	ApiResponse addBook(Long userId, BookRequestDto bookDto);
+	ApiResponse addBook(Integer userId, BookRequestDto bookDto);
 
 	ApiResponse updateBook(Long userId, Long bookId, BookRequestDto bookDto);
 
@@ -21,6 +21,10 @@ public interface BookService {
 	boolean deleteBookById(Long id);
 
 	List<BookResponseDto> getAllBooks();
+	
+	BookResponseDto getBookById(Long bookId);
+
+	List<BookResponseDto> getBookListByIdArray(List<Long> bookIds);
 
 	public BookFilterResponseDTO filterBooks(BookFilterRequestDto filterRequest);
 

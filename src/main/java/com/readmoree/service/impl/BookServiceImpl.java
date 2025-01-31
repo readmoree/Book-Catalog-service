@@ -1,5 +1,6 @@
 package com.readmoree.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,7 @@ import com.readmoree.dtos.BookFilterRequestDto;
 import com.readmoree.dtos.BookFilterResponseDTO;
 import com.readmoree.dtos.BookRequestDto;
 import com.readmoree.dtos.BookResponseDto;
+import com.readmoree.dtos.UserDto;
 import com.readmoree.entities.Author;
 import com.readmoree.entities.Book;
 import com.readmoree.entities.BooksMapping;
@@ -22,6 +24,7 @@ import com.readmoree.entities.BooksMappingId;
 import com.readmoree.entities.Publisher;
 import com.readmoree.exception.ResourceNotFoundException;
 import com.readmoree.service.BookService;
+import com.readmoree.utils.RequestUtils;
 import com.readmoree.dao.BooksMappingDao;
 
 import lombok.AllArgsConstructor;
@@ -42,12 +45,15 @@ public class BookServiceImpl implements BookService {
 	private BooksMappingDao booksMappingDao;
 
 	@Override
-	public ApiResponse addBook(Long userId, BookRequestDto bookDto) {
+	public ApiResponse addBook(Integer userId, BookRequestDto bookDto) {
 		//validate if userId is of admin
 		//call user service for the same!
 		//if userId is of admin: add a product
 		//else response msg
-		if(userId==1) {//suppose 1 belongs to admin
+		UserDto userDto = RequestUtils.requestUserService(userId);
+		System.out.println(userDto.getRole());
+		
+		if(userDto.getRole().equals("ADMIN")) {//suppose 1 belongs to admin
 			//convert dto to entity
 			Book book = modelMapper.map(bookDto, Book.class);
 			Author author = authorDao.findById(bookDto.getAuthorId()).orElseThrow(()->new ResourceNotFoundException("invalid author id"));
@@ -122,9 +128,6 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public List<BookResponseDto> searchBooks(String title, String description,String isbn, String firstName, String lastName) {
-		// TODO Auto-generated method stub
-		System.out.println("🔍 Searching books with: title=" + title + ", description=" + description +
-				", isbn=" + isbn + ", firstName=" + firstName + ", lastName=" + lastName);
 
 		List<Book> bookList = bookDao.searchBooks(title, description, isbn, firstName, lastName);
 		return  bookList.stream()
@@ -197,6 +200,24 @@ public class BookServiceImpl implements BookService {
 	                .publishers(publishers)
 	                .languages(languages)
 	                .build();
+	}
+	
+	@Override
+	public BookResponseDto getBookById(Long bookId) {
+		Book book = bookDao.findById(bookId).orElseThrow(()->new ResourceNotFoundException("Invalid book id"));
+		return modelMapper.map(book, BookResponseDto.class);
+	}
+
+	@Override
+	public List<BookResponseDto> getBookListByIdArray(List<Long> bookIds) {
+		List<Book> bookList = new ArrayList<>();
+		for(Long id: bookIds) {
+			Book book = bookDao.findById(id).orElseThrow(()->new ResourceNotFoundException("Invalid book id"));
+			bookList.add(book);
+		}
+		return bookList.stream()
+				.map(book->modelMapper.map(book, BookResponseDto.class))
+				.collect(Collectors.toList());
 	}
 
 }
