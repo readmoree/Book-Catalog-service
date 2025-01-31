@@ -111,9 +111,9 @@ public class BookController {
 	 * failure - SC 500
 	 */
 	
-	@PutMapping("/update-price/{userId}/{bookId}")
-	public ResponseEntity<?> updateBookPrice(@PathVariable Long userId, @PathVariable Long bookId, @RequestBody @Valid BookRequestDto bookDto){
-			return ResponseEntity.ok(bookService.updateBookPrice(userId, bookId, bookDto));
+	@PutMapping("/update/{userId}/{bookId}")
+	public ResponseEntity<?> updateBook(@PathVariable Long userId, @PathVariable Long bookId, @RequestBody @Valid BookRequestDto bookDto){
+			return ResponseEntity.ok(bookService.updateBook(userId, bookId, bookDto));
 		
 	}
 	

@@ -14,7 +14,7 @@ public class ReviewResponseDto extends BaseEntity {
 	
 	private Long customerId;
 	
-	private Book bookId;
+	private Book book;
 	
 	private String comment;
 	

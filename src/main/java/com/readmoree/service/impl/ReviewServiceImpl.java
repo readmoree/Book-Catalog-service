@@ -48,7 +48,7 @@ public class ReviewServiceImpl implements ReviewService {
 		//convert reviewDto to entity
 		Review review = modelMappper.map(reviewRequestDto, Review.class);
 		review.setCustomerId(userId);
-		review.setBookId(book);
+		review.setBook(book);
 
 		Review savedReview = reviewDao.save(review);
 
@@ -123,6 +123,19 @@ public class ReviewServiceImpl implements ReviewService {
 		List<Review> reviews = reviewDao.findByCustomerIdAndBookId(userId, book);
 		
 		return  reviews.stream()
+				.map(review->modelMappper.map(review, ReviewResponseDto.class))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<ReviewResponseDto> getAllReviewsOnBook(Long bookId) {
+		
+		//validate book
+		Book book = validateBook(bookId);
+		
+		List<Review> reviewList = reviewDao.findByBook(book);
+		
+		return reviewList.stream()
 				.map(review->modelMappper.map(review, ReviewResponseDto.class))
 				.collect(Collectors.toList());
 	}

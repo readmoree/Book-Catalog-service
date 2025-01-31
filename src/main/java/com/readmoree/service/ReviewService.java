@@ -18,4 +18,6 @@ public interface ReviewService {
 
 	List<ReviewResponseDto> getAllReviewsOnBookByCustomer(Long userId, Long bookId);
 
+	List<ReviewResponseDto> getAllReviewsOnBook(Long bookId);
+
 }

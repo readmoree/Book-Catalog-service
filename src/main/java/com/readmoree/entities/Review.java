@@ -24,7 +24,7 @@ public class Review extends BaseEntity {
 	
 	@ManyToOne
 	@JoinColumn(name="book_id")
-	private Book bookId;
+	private Book book;
 	
 	private String comment;
 	

@@ -60,7 +60,7 @@ public class BookServiceImpl implements BookService {
 	}
 
 	@Override
-	public ApiResponse updateBookPrice(Long userId, Long bookId, BookRequestDto bookDto) {
+	public ApiResponse updateBook(Long userId, Long bookId, BookRequestDto bookDto) {
 		//validate user(suppose userId=1 is admin
 		if(userId==1) {
 			//validate bookId
@@ -87,7 +87,7 @@ public class BookServiceImpl implements BookService {
 
 			//map to responsedto
 			BookResponseDto updatedBook = modelMapper.map(bookToBeUpdated, BookResponseDto.class);
-			return new ApiResponse("Book price updated successfully", updatedBook);
+			return new ApiResponse("Book details updated successfully", updatedBook);
 		}
 		else {
 

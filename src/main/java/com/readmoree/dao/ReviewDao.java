@@ -12,6 +12,8 @@ public interface ReviewDao extends JpaRepository<Review, Long> {
 	
 	List<Review> findByCustomerId(Long customerId);
 	
-	List<Review> findByCustomerIdAndBookId(Long customerId, Book bookId);
+	List<Review> findByCustomerIdAndBookId(Long customerId, Book book);
+	
+	List<Review> findByBook(Book book);
 
 }

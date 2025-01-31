@@ -10,7 +10,7 @@ public interface BookService {
 
 	ApiResponse addBook(Long userId, BookRequestDto bookDto);
 
-	ApiResponse updateBookPrice(Long userId, Long bookId, BookRequestDto bookDto);
+	ApiResponse updateBook(Long userId, Long bookId, BookRequestDto bookDto);
 
 //	List<BookResponseDto> findBook(String searchQuery);
 
