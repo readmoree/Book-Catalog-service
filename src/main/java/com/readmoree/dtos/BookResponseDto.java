@@ -16,6 +16,8 @@ import lombok.*;
 @Builder
 public class BookResponseDto extends BaseEntity {
 	
+	private String imgUrl;
+	
 	private String isbn;
 	
 	private String title;
@@ -38,7 +40,8 @@ public class BookResponseDto extends BaseEntity {
 	
 	private double discount;
 	
-	public BookResponseDto(String isbn,  String title, Author author, Publisher publisher, double price, Language language, double discount) {
+	public BookResponseDto(String imgUrl, String isbn,  String title, Author author, Publisher publisher, double price, Language language, double discount) {
+		this.imgUrl = imgUrl;
 		this.isbn=isbn;
 		this.title=title;
 		this.author=(Author)author;
@@ -48,6 +51,8 @@ public class BookResponseDto extends BaseEntity {
 		this.discount=discount;
 		
 	}
+
+	
 
 	
 }

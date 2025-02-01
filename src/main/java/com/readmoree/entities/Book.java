@@ -45,8 +45,8 @@ public class Book extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private Language language;
 	
-	@Lob
-	private byte[] image;
+	@Column(name= "img_url")
+	private String image;
 	
 	@Column(length = 20,columnDefinition = "VARCHAR(20)")
 	@Enumerated(EnumType.STRING)

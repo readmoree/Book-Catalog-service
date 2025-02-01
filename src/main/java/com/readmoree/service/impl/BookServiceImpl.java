@@ -1,7 +1,13 @@
 package com.readmoree.service.impl;
 
+<<<<<<< Updated upstream
 import java.util.ArrayList;
+=======
+import java.util.Collections;
+>>>>>>> Stashed changes
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -160,46 +166,59 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public BookFilterResponseDTO filterBooks(BookFilterRequestDto filterRequest) {
-		List<Book> books =  bookDao.filterBooks(
-                filterRequest.getLabels(),
-                filterRequest.getCategory(),
-                filterRequest.getSubCategory());
-		 
-		// Convert books to DTO format
-		List<BookResponseDto> bookList = books.stream()
-			    .map(book -> new BookResponseDto(
-			        book.getIsbn(),
-			        book.getTitle(),
-			        book.getAuthor(),
-			        book.getPublisher(),
-			        book.getPrice(),
-			        book.getLanguage(),
-			        book.getDiscount()
-			    ))
-			    .collect(Collectors.toList());
-	        
-	     // Extract unique authors, publishers, and languages
-	        List<String> authors = books.stream()
-	                .map(book -> book.getAuthor().getFirstName() + " " + book.getAuthor().getLastName())
-	                .distinct()
-	                .collect(Collectors.toList());
+		System.out.println("IN THE filterBook");
+	    List<Book> books = bookDao.filterBooks(
+	            filterRequest.getLabels(),
+	            filterRequest.getCategory(),
+	            filterRequest.getSubCategory());
+	    
+	    System.out.println("books"+ books);
 
-	        List<String> publishers = books.stream()
-	                .map(book -> book.getPublisher().getName())
-	                .distinct()
-	                .collect(Collectors.toList());
+	    // Convert books to DTO format
+	    List<BookResponseDto> bookList = books.stream()
+	            .map(book -> new BookResponseDto(
+	            		book.getImage(),
+	                    book.getIsbn(),
+	                    book.getTitle(),
+	                    book.getAuthor(),
+	                    book.getPublisher(),
+	                    book.getPrice(),
+	                    book.getLanguage(),
+	                    book.getDiscount()
+	            ))
+	            .collect(Collectors.toList());
 
-	        List<String> languages = books.stream()
-	                .map(book -> book.getLanguage().name())  // Convert Enum to String
-	                .distinct()
-	                .collect(Collectors.toList());
+	    // Extract unique authors, publishers, and languages
+	    List<String> authors = books.stream()
+	            .map(book -> book.getAuthor() != null
+	                    ? book.getAuthor().getFirstName() + " " + book.getAuthor().getLastName()
+	                    : null) // Return null so it can be filtered out
+	            .filter(Objects::nonNull) // Remove null values
+	            .distinct()
+	            .collect(Collectors.toList());
 
-	        return BookFilterResponseDTO.builder()
-	                .books(bookList)
-	                .authors(authors)
-	                .publishers(publishers)
-	                .languages(languages)
-	                .build();
+	    List<String> publishers = books.stream()
+	            .map(book -> Optional.ofNullable(book.getPublisher())
+	                    .map(Publisher::getName)
+	                    .orElse(null)) // Return null for filtering
+	            .filter(Objects::nonNull)
+	            .distinct()
+	            .collect(Collectors.toList());
+
+	    List<String> languages = books.stream()
+	            .map(book -> Optional.ofNullable(book.getLanguage())
+	                    .map(lang -> lang.name())
+	                    .orElse(null)) // Return null for filtering
+	            .filter(Objects::nonNull)
+	            .distinct()
+	            .collect(Collectors.toList());
+
+	    return BookFilterResponseDTO.builder()
+	            .books(bookList)
+	            .authors(authors.isEmpty() ? Collections.emptyList() : authors)
+	            .publishers(publishers.isEmpty() ? Collections.emptyList() : publishers)
+	            .languages(languages.isEmpty() ? Collections.emptyList() : languages)
+	            .build();
 	}
 	
 	@Override
@@ -219,5 +238,6 @@ public class BookServiceImpl implements BookService {
 				.map(book->modelMapper.map(book, BookResponseDto.class))
 				.collect(Collectors.toList());
 	}
+
 
 }

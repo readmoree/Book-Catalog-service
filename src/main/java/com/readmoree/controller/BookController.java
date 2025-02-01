@@ -16,11 +16,13 @@ import com.readmoree.dtos.BookFilterRequestDto;
 import com.readmoree.dtos.BookFilterResponseDTO;
 import com.readmoree.dtos.BookRequestDto;
 import com.readmoree.dtos.BookResponseDto;
+import com.readmoree.entities.Labels;
 import com.readmoree.service.BookService;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -30,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RestController
 @RequestMapping("/book")
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
 public class BookController {
 
 	private BookService bookService;
@@ -159,6 +162,7 @@ public class BookController {
 	// Example Api call: /books/filter?category=Fiction&subCategory=Dystopian
 
 	@GetMapping("/filter")
+<<<<<<< Updated upstream
 	public ResponseEntity<BookFilterResponseDTO> filterBooks(@ModelAttribute BookFilterRequestDto filterRequest) {
 		BookFilterResponseDTO books = bookService.filterBooks(filterRequest);
 		return ResponseEntity.ok(books);
@@ -170,4 +174,51 @@ public class BookController {
 
 
 
+=======
+	public ResponseEntity<BookFilterResponseDTO> filterBooks(
+	        @RequestParam(required = false) String label,
+	        @RequestParam(required = false) String category,
+	        @RequestParam(required = false) String subcategory) {
+	    
+	    // Decode and replace '%20' with spaces for all parameters
+		if (label != null) {
+	        label = label.replace("%20", "").replace(" ", "").trim();  // Remove spaces after replacing '%20' for label
+	    }
+		System.out.println(label);
+	    
+	    if (category != null) {
+	        category = category.replace("%20", " ");  // Replace '%20' with space for category
+	    }
+
+	    if (subcategory != null) {
+	        subcategory = subcategory.replace("%20", " ");  // Replace '%20' with space for subcategory
+	    }
+	    System.out.println("AFTER PRCOESSING");
+
+	    // Convert the label to uppercase to match enum names
+	    Labels labelEnum = null;
+	    if (label != null) {
+	        try {
+	        	System.out.println(label.toUpperCase());
+	            labelEnum = Labels.valueOf(label.toUpperCase()); // Convert to uppercase to match enum names
+	            System.out.println(labelEnum);
+	        } catch (IllegalArgumentException e) {
+	            return ResponseEntity.badRequest().body(null); // Handle invalid enum values
+	        }
+	    }
+
+	    BookFilterRequestDto filterRequest = new BookFilterRequestDto(labelEnum, category, subcategory);
+	    BookFilterResponseDTO books = bookService.filterBooks(filterRequest);
+	    return ResponseEntity.ok(books);
+	}
+
+
+	
+	
+	
+	
+	
+	
+	
+>>>>>>> Stashed changes
 }
