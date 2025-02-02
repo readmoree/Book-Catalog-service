@@ -1,10 +1,7 @@
 package com.readmoree.service.impl;
 
-<<<<<<< Updated upstream
 import java.util.ArrayList;
-=======
 import java.util.Collections;
->>>>>>> Stashed changes
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -22,7 +19,6 @@ import com.readmoree.dtos.BookFilterRequestDto;
 import com.readmoree.dtos.BookFilterResponseDTO;
 import com.readmoree.dtos.BookRequestDto;
 import com.readmoree.dtos.BookResponseDto;
-import com.readmoree.dtos.UserDto;
 import com.readmoree.entities.Author;
 import com.readmoree.entities.Book;
 import com.readmoree.entities.BooksMapping;
@@ -30,7 +26,6 @@ import com.readmoree.entities.BooksMappingId;
 import com.readmoree.entities.Publisher;
 import com.readmoree.exception.ResourceNotFoundException;
 import com.readmoree.service.BookService;
-import com.readmoree.utils.RequestUtils;
 import com.readmoree.dao.BooksMappingDao;
 
 import lombok.AllArgsConstructor;
@@ -51,15 +46,15 @@ public class BookServiceImpl implements BookService {
 	private BooksMappingDao booksMappingDao;
 
 	@Override
-	public ApiResponse addBook(Integer userId, BookRequestDto bookDto) {
+	public ApiResponse addBook(BookRequestDto bookDto) {
 		//validate if userId is of admin
 		//call user service for the same!
 		//if userId is of admin: add a product
 		//else response msg
-		UserDto userDto = RequestUtils.requestUserService(userId);
-		System.out.println(userDto.getRole());
+//		UserDto userDto = RequestUtils.requestUserService(userId);
+//		System.out.println(userDto.getRole());
 		
-		if(userDto.getRole().equals("ADMIN")) {//suppose 1 belongs to admin
+//		if(userDto.getRole().equals("ADMIN")) {//suppose 1 belongs to admin
 			//convert dto to entity
 			Book book = modelMapper.map(bookDto, Book.class);
 			Author author = authorDao.findById(bookDto.getAuthorId()).orElseThrow(()->new ResourceNotFoundException("invalid author id"));
@@ -91,15 +86,15 @@ public class BookServiceImpl implements BookService {
 			BookResponseDto bookRequestDto = modelMapper.map(addedBook, BookResponseDto.class);
 			return new ApiResponse("Book added with id:"+addedBook.getId() +"successfully",bookRequestDto);
 
-		}else {
-			return new ApiResponse("Only admin can add product");
-		}
+//		}else {
+//			return new ApiResponse("Only admin can add product");
+//		}
 	}
 
 	@Override
-	public ApiResponse updateBook(Long userId, Long bookId, BookRequestDto bookDto) {
+	public ApiResponse updateBook(Long bookId, BookRequestDto bookDto) {
 		//validate user(suppose userId=1 is admin
-		if(userId==1) {
+//		if(userId==1) {
 			//validate bookId
 			Book bookToBeUpdated = bookDao.findById(bookId).orElseThrow(()->new ResourceNotFoundException("Invalid book id")); 
 
@@ -125,11 +120,11 @@ public class BookServiceImpl implements BookService {
 			//map to responsedto
 			BookResponseDto updatedBook = modelMapper.map(bookToBeUpdated, BookResponseDto.class);
 			return new ApiResponse("Book details updated successfully", updatedBook);
-		}
-		else {
-
-			return new ApiResponse("Error occurred! try again later!");
-		}
+//		}
+//		else {
+//
+//			return new ApiResponse("Error occurred! try again later!");
+//		}
 	}
 
 	@Override
@@ -143,9 +138,9 @@ public class BookServiceImpl implements BookService {
 	}
 
 	@Override
-	public boolean deleteBookById(Long id) {
+	public boolean deleteBookById(Long bookId) {
 		//check if id is valid
-		Book bookTobeDeleted = bookDao.findById(id).orElseThrow(()->new ResourceNotFoundException("Invalid book id"));
+		Book bookTobeDeleted = bookDao.findById(bookId).orElseThrow(()->new ResourceNotFoundException("Invalid book id"));
 
 		if(bookTobeDeleted.isAvailable()) {
 			bookTobeDeleted.setAvailable(false);
@@ -238,6 +233,5 @@ public class BookServiceImpl implements BookService {
 				.map(book->modelMapper.map(book, BookResponseDto.class))
 				.collect(Collectors.toList());
 	}
-
 
 }

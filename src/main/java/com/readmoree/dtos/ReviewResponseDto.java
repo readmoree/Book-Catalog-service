@@ -16,7 +16,7 @@ public class ReviewResponseDto extends BaseEntity {
 	
 	private String bookTitle;
 	
-	private byte[] image;
+	private String image;
 	
 	private String comment;
 	

@@ -10,15 +10,15 @@ import com.readmoree.dtos.BookResponseDto;
 
 public interface BookService {
 
-	ApiResponse addBook(Integer userId, BookRequestDto bookDto);
+	ApiResponse addBook(BookRequestDto bookDto);
 
-	ApiResponse updateBook(Long userId, Long bookId, BookRequestDto bookDto);
+	ApiResponse updateBook(Long bookId, BookRequestDto bookDto);
 
 //	List<BookResponseDto> findBook(String searchQuery);
 
 	List<BookResponseDto> searchBooks(String title, String firstName, String lastName, String description, String isbn);
 
-	boolean deleteBookById(Long id);
+	boolean deleteBookById(Long bookId);
 
 	List<BookResponseDto> getAllBooks();
 	

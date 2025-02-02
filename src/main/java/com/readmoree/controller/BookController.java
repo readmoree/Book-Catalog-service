@@ -83,10 +83,10 @@ public class BookController {
 	 * failure- SC 500
 	 */
 
-	@PostMapping("/add/{userId}")
-	public ResponseEntity<?> addBookToInventory(@PathVariable Integer userId, @RequestBody @Valid BookRequestDto bookDto){
+	@PostMapping("/admin/add")
+	public ResponseEntity<?> addBookToInventory(@RequestBody @Valid BookRequestDto bookDto){
 		try {
-			return ResponseEntity.ok(bookService.addBook(userId, bookDto));
+			return ResponseEntity.ok(bookService.addBook(bookDto));
 		}catch(RuntimeException e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage()));
 		}
@@ -104,10 +104,10 @@ public class BookController {
 	 * success - SC 200, with updated bookResponseDto
 	 * failure - SC 404
 	 */
-	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<?> deleteBook(@PathVariable Long id) {
+	@DeleteMapping("/admin/delete/{bookId}")
+	public ResponseEntity<?> deleteBook(@PathVariable Long bookId) {
 
-		return ResponseEntity.ok(bookService.deleteBookById(id));
+		return ResponseEntity.ok(bookService.deleteBookById(bookId));
 
 	}
 
@@ -124,9 +124,9 @@ public class BookController {
 	 * failure - SC 500
 	 */
 
-	@PutMapping("/update/{userId}/{bookId}")
-	public ResponseEntity<?> updateBook(@PathVariable Long userId, @PathVariable Long bookId, @RequestBody @Valid BookRequestDto bookDto){
-		return ResponseEntity.ok(bookService.updateBook(userId, bookId, bookDto));
+	@PutMapping("/admin/update/{bookId}")
+	public ResponseEntity<?> updateBook(@PathVariable Long bookId, @RequestBody @Valid BookRequestDto bookDto){
+		return ResponseEntity.ok(bookService.updateBook(bookId, bookDto));
 
 	}
 
@@ -162,19 +162,12 @@ public class BookController {
 	// Example Api call: /books/filter?category=Fiction&subCategory=Dystopian
 
 	@GetMapping("/filter")
-<<<<<<< Updated upstream
+
 	public ResponseEntity<BookFilterResponseDTO> filterBooks(@ModelAttribute BookFilterRequestDto filterRequest) {
 		BookFilterResponseDTO books = bookService.filterBooks(filterRequest);
 		return ResponseEntity.ok(books);
 	}
-
-
-
-
-
-
-
-=======
+	
 	public ResponseEntity<BookFilterResponseDTO> filterBooks(
 	        @RequestParam(required = false) String label,
 	        @RequestParam(required = false) String category,
@@ -212,13 +205,4 @@ public class BookController {
 	    return ResponseEntity.ok(books);
 	}
 
-
-	
-	
-	
-	
-	
-	
-	
->>>>>>> Stashed changes
 }
