@@ -20,7 +20,7 @@ import lombok.Setter;
 public class Review extends BaseEntity {
 
 	@Column(name="customer_id")
-	private Long customerId;
+	private Integer customerId;
 	
 	@ManyToOne
 	@JoinColumn(name="book_id")

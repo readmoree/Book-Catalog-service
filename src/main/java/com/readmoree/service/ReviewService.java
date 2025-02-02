@@ -8,15 +8,15 @@ import com.readmoree.dtos.ReviewResponseDto;
 
 public interface ReviewService {
 
-	ApiResponse addreview(Long userId, Long bookId, ReviewRequestDto reviewRequestDto);
+	ApiResponse addreview(Integer customerId,Long bookId, ReviewRequestDto reviewRequestDto);
 
-	ApiResponse deleteReview(Long userId, Long bookId, Long reviewId);
+	ApiResponse deleteReview(Long bookId, Long reviewId);
 
-	ApiResponse updateReview(Long userId, Long bookId, Long reviewId, ReviewRequestDto reviewRequestDto);
+	ApiResponse updateReview(Long bookId, Long reviewId, ReviewRequestDto reviewRequestDto);
 
-	List<ReviewResponseDto> getAllReviewsByCustomer(Long userId);
+	List<ReviewResponseDto> getAllReviewsByCustomer(Integer customerId);
 
-	List<ReviewResponseDto> getAllReviewsOnBookByCustomer(Long userId, Long bookId);
+	List<ReviewResponseDto> getAllReviewsOnBookByCustomer(Integer customerId,Long bookId);
 
 	List<ReviewResponseDto> getAllReviewsOnBook(Long bookId);
 

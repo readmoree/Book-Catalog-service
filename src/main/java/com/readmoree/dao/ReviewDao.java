@@ -10,9 +10,9 @@ import com.readmoree.entities.Book;
 
 public interface ReviewDao extends JpaRepository<Review, Long> {
 	
-	List<Review> findByCustomerId(Long customerId);
+	List<Review> findByCustomerId(Integer customerId);
 	
-	List<Review> findByCustomerIdAndBookId(Long customerId, Book book);
+	List<Review> findByCustomerIdAndBookId(Integer customerId, Book book);
 	
 	List<Review> findByBook(Book book);
 

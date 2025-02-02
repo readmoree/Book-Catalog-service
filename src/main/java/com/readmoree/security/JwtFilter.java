@@ -52,6 +52,13 @@ public class JwtFilter extends OncePerRequestFilter {
         
         if (claims != null) {
             String role = claims.get("role", String.class); // Assuming the role is in a claim named "role"
+            String customerId = claims.get("customerId", String.class);
+
+            // Make the customerId available in the SecurityContext
+            SecurityContextHolder.getContext().setAuthentication(
+                new UsernamePasswordAuthenticationToken(customerId, null, null)
+            );
+            
             if ("ADMIN".equals(role)) {
                 // Role is admin, proceed with the request
                 // Add user authentication to the SecurityContext

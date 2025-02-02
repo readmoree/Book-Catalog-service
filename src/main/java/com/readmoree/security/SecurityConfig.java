@@ -30,12 +30,12 @@ public class SecurityConfig {
         		"/swagger-ui/**",
                 "/v3/api-docs/**",
                 "/swagger-ui.html",
-				"/v*/api-doc*/**","/swagger-ui/**").permitAll() 
+				"/v*/api-doc*/**","/swagger-ui/**","/reviews/book/**").permitAll() 
         //required explicitly for JS clients (eg React app - to permit pre flight requests)
 //        .requestMatchers(HttpMethod.OPTIONS).permitAll()
         	
-//       .requestMatchers("/products/purchase/**")
-//       .hasRole("CUSTOMER")
+       .requestMatchers("/reviews/customer/**")
+       .hasRole("CUSTOMER")
        .requestMatchers("/admin/**")
        .hasRole("ADMIN")        		
         .anyRequest().authenticated())  

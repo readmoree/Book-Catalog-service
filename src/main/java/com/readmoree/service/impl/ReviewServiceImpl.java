@@ -50,7 +50,7 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public ApiResponse addreview(Long userId, Long bookId, ReviewRequestDto reviewRequestDto) {
+	public ApiResponse addreview(Integer customerId, Long bookId, ReviewRequestDto reviewRequestDto) {
 
 		//validate user by calling user-service
 
@@ -62,7 +62,7 @@ public class ReviewServiceImpl implements ReviewService {
 
 		//convert reviewDto to entity
 		Review review = modelMappper.map(reviewRequestDto, Review.class);
-		review.setCustomerId(userId);
+		review.setCustomerId(customerId);
 		review.setBook(book);
 
 		Review savedReview = reviewDao.save(review);
@@ -73,7 +73,7 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public ApiResponse deleteReview(Long userId, Long bookId, Long reviewId) {
+	public ApiResponse deleteReview(Long bookId, Long reviewId) {
 
 		//validate user
 
@@ -94,7 +94,7 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public ApiResponse updateReview(Long userId, Long bookId, Long reviewId, ReviewRequestDto reviewRequestDto) {
+	public ApiResponse updateReview(Long bookId, Long reviewId, ReviewRequestDto reviewRequestDto) {
 
 		//validate user
 
@@ -116,10 +116,10 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public List<ReviewResponseDto> getAllReviewsByCustomer(Long userId) {
+	public List<ReviewResponseDto> getAllReviewsByCustomer(Integer customerId) {
 		//validate user
 		
-		List<Review> reviewsByCustomerId = reviewDao.findByCustomerId(userId);
+		List<Review> reviewsByCustomerId = reviewDao.findByCustomerId(customerId);
 		
 
 		return reviewsByCustomerId.stream()
@@ -128,14 +128,14 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public List<ReviewResponseDto> getAllReviewsOnBookByCustomer(Long userId, Long bookId) {
+	public List<ReviewResponseDto> getAllReviewsOnBookByCustomer(Integer customerId,Long bookId) {
 
 		//validate user
 		
 		//validate book
 		Book book = validateBook(bookId);
 		
-		List<Review> reviews = reviewDao.findByCustomerIdAndBookId(userId, book);
+		List<Review> reviews = reviewDao.findByCustomerIdAndBookId(customerId, book);
 		
 		return  reviews.stream()
 				.map(review->convertToDto(review))
