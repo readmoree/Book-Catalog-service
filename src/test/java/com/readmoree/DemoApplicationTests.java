@@ -18,6 +18,7 @@ import com.readmoree.security.JwtUtils;
 
 import jakarta.servlet.FilterChain;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 
@@ -37,7 +38,7 @@ class DemoApplicationTests {
 
 	    @Test
 	    public void testDoFilterInternal() throws Exception {
-	    	String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaXJzdE5hbWUiOiJTdGVsbGEiLCJjdXN0b21lcklkIjoyLCJlbWFpbCI6InN0ZWxsYUBnbWFpbC5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MzgyMTc0OTksImV4cCI6MTczOTA4MTQ5OX0.C_QVhLyQbEZojIoFI4CDLxpGmH_1bB3VT38Pvw4jaLo";
+	    	String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaXJzdE5hbWUiOiJTdGVsbGEiLCJjdXN0b21lcklkIjoyLCJlbWFpbCI6InN0ZWxsYUBnbWFpbC5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3Mzg1MDc2OTAsImV4cCI6MTczOTM3MTY5MH0.471LTKG9AP3lpSMERcXVyBjGrtsEv2lb-veDxUFoMnc";
 	        MockHttpServletRequest request = new MockHttpServletRequest();
 	        request.addHeader("Authorization", "Bearer "+token);
 
@@ -57,6 +58,9 @@ class DemoApplicationTests {
 //	        Authentication authentication = jwtUtil.populateAuthenticationTokenFromJWT(token);
 //	        assert(authentication != null);
 //	        assert(authentication.getName().equals("Stella"));
+	        
+	        boolean isValid = jwtUtil.validateToken(token);
+	        assertTrue(isValid);
 	    }
 
 }
