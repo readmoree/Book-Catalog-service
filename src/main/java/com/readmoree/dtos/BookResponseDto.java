@@ -40,8 +40,12 @@ public class BookResponseDto extends BaseEntity {
 	
 	private double discount;
 	
+<<<<<<< HEAD
 	public BookResponseDto(Long bookId,String imgUrl, String isbn,  String title, Author author, Publisher publisher, double price, Language language, double discount) {
 		super.setId(bookId);
+=======
+	public BookResponseDto(String imgUrl, String isbn,  String title, Author author, Publisher publisher, double price, Language language, double discount) {
+>>>>>>> 4758a2c2c5e56d14167a243d44e7b2555ecf1969
 		this.image = imgUrl;
 		this.isbn=isbn;
 		this.title=title;
