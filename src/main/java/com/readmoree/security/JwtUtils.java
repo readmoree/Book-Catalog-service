@@ -50,7 +50,9 @@ public class JwtUtils {
 				.setSigningKey(new SecretKeySpec(jwtSecret.getBytes(), SignatureAlgorithm.HS256.getJcaName())) //sets the SAME secret key for JWT signature verification
 				.build()//rets the JWT parser set with the Key
 				.parseClaimsJws(jwtToken) //rets JWT with Claims added in the body
-				.getBody();//=> JWT valid ,  rets the Claims(payload)		
+				.getBody();//=> JWT valid ,  rets the Claims(payload)	
+		
+		System.out.println("in validateToken");
 		return claims;		
 	}
 	

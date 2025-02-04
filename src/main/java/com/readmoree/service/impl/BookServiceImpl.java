@@ -15,6 +15,7 @@ import com.readmoree.dao.AuthorDao;
 import com.readmoree.dao.BookDao;
 import com.readmoree.dao.PublisherDao;
 import com.readmoree.dtos.ApiResponse;
+import com.readmoree.dtos.BookCustomResponseDto;
 import com.readmoree.dtos.BookFilterRequestDto;
 import com.readmoree.dtos.BookFilterResponseDTO;
 import com.readmoree.dtos.BookRequestDto;
@@ -172,6 +173,7 @@ public class BookServiceImpl implements BookService {
 	    // Convert books to DTO format
 	    List<BookResponseDto> bookList = books.stream()
 	            .map(book -> new BookResponseDto(
+	            		book.getId(),
 	            		book.getImage(),
 	                    book.getIsbn(),
 	                    book.getTitle(),
@@ -232,6 +234,19 @@ public class BookServiceImpl implements BookService {
 		return bookList.stream()
 				.map(book->modelMapper.map(book, BookResponseDto.class))
 				.collect(Collectors.toList());
+	}
+
+	@Override
+	public BookCustomResponseDto getCustomBookDetailsById(Long bookId) {
+		Book book = bookDao.findById(bookId).orElseThrow(()->new ResourceNotFoundException("Invalid book id"));
+		BookCustomResponseDto customBookResponseDto = new BookCustomResponseDto();
+		customBookResponseDto.setId(bookId);
+		customBookResponseDto.setCreatedOn(book.getCreatedOn());
+		customBookResponseDto.setUpdatedOn(book.getUpdatedOn());
+		customBookResponseDto.setImage(book.getImage());
+		customBookResponseDto.setIsbn(book.getIsbn());
+		customBookResponseDto.setTitle(book.getTitle());
+		return customBookResponseDto;
 	}
 
 }

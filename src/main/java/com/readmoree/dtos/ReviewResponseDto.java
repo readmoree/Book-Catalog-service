@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ReviewResponseDto extends BaseEntity {
 	
-//	private Long customerId;
+	private Integer customerId;
 
 	private Long bookid;
 	
