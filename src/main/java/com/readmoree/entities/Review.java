@@ -19,7 +19,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Review extends BaseEntity {
 
-	@Column(name="customer_id")
+	@Column(name="customer_id",unique = true)
 	private Integer customerId;
 	
 	@ManyToOne

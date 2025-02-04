@@ -2,8 +2,6 @@ package com.readmoree.dtos;
 
 import java.util.List;
 
-import com.readmoree.entities.Language;
-
 import lombok.*;
 
 @Getter

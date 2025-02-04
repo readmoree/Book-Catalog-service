@@ -34,4 +34,11 @@ public class ApiResponse {
 		this.book = book;
 		this.review=review;
 	}
+	public ApiResponse(String message, ReviewResponseDto review) {
+		super();
+		this.message = message;
+		this.timeStamp=LocalDateTime.now();
+		this.review = review;
+	}
+	
 }

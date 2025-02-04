@@ -25,7 +25,6 @@ public class Book extends BaseEntity {
 	@Column(length = 20, unique=true, nullable=false)
 	private String isbn;
 	
-	@Column(length = 40)
 	private String title;
 	
 	@Column(length = 20, nullable = false)
@@ -34,7 +33,7 @@ public class Book extends BaseEntity {
 	@Column(name="publication_date")
 	private LocalDate publicationDate;
 	
-	@Column
+	@Column(length=1000)
 	private String description;
 	
 	@Column(name="page_count")
@@ -44,7 +43,7 @@ public class Book extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private Language language;
 	
-	@Column(name= "img_url")
+	@Column(name= "img_url",length=1000)
 	private String image;
 	
 	@Column(length = 20,columnDefinition = "VARCHAR(20)")
@@ -67,6 +66,7 @@ public class Book extends BaseEntity {
 	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<BooksMapping> booksMappings;
 	
+	@Column(columnDefinition = "decimal(5,2) DEFAULT 0.0")
 	private double discount;
 	
 }

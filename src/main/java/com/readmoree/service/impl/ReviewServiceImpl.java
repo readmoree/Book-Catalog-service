@@ -41,7 +41,7 @@ public class ReviewServiceImpl implements ReviewService {
 		reviewResponseDto.setId(review.getId());
 		reviewResponseDto.setComment(review.getComment());
 		reviewResponseDto.setCreatedOn(review.getCreatedOn());
-//		reviewResponseDto.setCustomerId(review.getCustomerId());
+		reviewResponseDto.setCustomerId(review.getCustomerId());
 		reviewResponseDto.setImage(review.getBook().getImage());
 		reviewResponseDto.setRating(review.getRating());
 		reviewResponseDto.setUpdatedOn(review.getUpdatedOn());
@@ -58,7 +58,7 @@ public class ReviewServiceImpl implements ReviewService {
 		Book book = validateBook(bookId);
 
 		//entity to dto
-		BookResponseDto bookResponseDto = modelMappper.map(book, BookResponseDto.class);
+//		BookResponseDto bookResponseDto = modelMappper.map(book, BookResponseDto.class);
 
 		//convert reviewDto to entity
 		Review review = modelMappper.map(reviewRequestDto, Review.class);
@@ -67,9 +67,9 @@ public class ReviewServiceImpl implements ReviewService {
 
 		Review savedReview = reviewDao.save(review);
 
-		ReviewResponseDto reviewResponseDto = modelMappper.map(savedReview, ReviewResponseDto.class);
+		//ReviewResponseDto reviewResponseDto = modelMappper.map(savedReview, ReviewResponseDto.class);
 
-		return new ApiResponse("Review added!", bookResponseDto, reviewResponseDto);
+		return new ApiResponse("Review added!", convertToDto(savedReview));
 	}
 
 	@Override
@@ -135,7 +135,7 @@ public class ReviewServiceImpl implements ReviewService {
 		//validate book
 		Book book = validateBook(bookId);
 		
-		List<Review> reviews = reviewDao.findByCustomerIdAndBookId(customerId, book);
+		List<Review> reviews = reviewDao.findByCustomerIdAndBook(customerId, book);
 		
 		return  reviews.stream()
 				.map(review->convertToDto(review))

@@ -12,7 +12,7 @@ public interface ReviewDao extends JpaRepository<Review, Long> {
 	
 	List<Review> findByCustomerId(Integer customerId);
 	
-	List<Review> findByCustomerIdAndBookId(Integer customerId, Book book);
+	List<Review> findByCustomerIdAndBook(Integer customerId, Book book);
 	
 	List<Review> findByBook(Book book);
 

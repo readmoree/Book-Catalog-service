@@ -50,6 +50,10 @@ public class BookRequestDto {
 	@NotNull(message="Publisher id must not be null")
 	private Long publisherId;
 	
+	private String image;
+	
+	private double discount;
+	
 	private List<BookMappingRequestDto> bookMappings;
 	
 

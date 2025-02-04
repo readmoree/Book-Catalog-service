@@ -3,6 +3,7 @@ package com.readmoree.service;
 import java.util.List;
 
 import com.readmoree.dtos.ApiResponse;
+import com.readmoree.dtos.BookCustomResponseDto;
 import com.readmoree.dtos.BookFilterRequestDto;
 import com.readmoree.dtos.BookFilterResponseDTO;
 import com.readmoree.dtos.BookRequestDto;
@@ -27,5 +28,7 @@ public interface BookService {
 	List<BookResponseDto> getBookListByIdArray(List<Long> bookIds);
 
 	public BookFilterResponseDTO filterBooks(BookFilterRequestDto filterRequest);
+
+	BookCustomResponseDto getCustomBookDetailsById(Long bookId);
 
 }

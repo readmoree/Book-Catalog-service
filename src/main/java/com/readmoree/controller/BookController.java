@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.readmoree.dtos.ApiResponse;
+import com.readmoree.dtos.BookCustomResponseDto;
 import com.readmoree.dtos.BookFilterRequestDto;
 import com.readmoree.dtos.BookFilterResponseDTO;
 import com.readmoree.dtos.BookRequestDto;
@@ -28,11 +29,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 @RestController
 @RequestMapping("/book")
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://0.0.0.0:3000")
 public class BookController {
 
 	private BookService bookService;
@@ -48,7 +48,7 @@ public class BookController {
 	 * success Resp -SC 200, ok JSON representation of List of Books
 	 * failure(empty list) resp - SC 204
 	 */
-	@GetMapping("/all")
+	@GetMapping("/public/all")
 	public ResponseEntity<?> getAllBooks(){
 		List<BookResponseDto> allBookList=bookService.getAllBooks();
 
@@ -57,14 +57,21 @@ public class BookController {
 	}
 
 	// get a particular book by id
-	@GetMapping("/{bookId}")
+	@GetMapping("/public/{bookId}")
 	public ResponseEntity<?> getBookById(@PathVariable Long bookId){
 		BookResponseDto book= bookService.getBookById(bookId);
 		return ResponseEntity.ok(book);
 	}
 
+	//get book details: for admin
+	@GetMapping("/public/order/{bookId}")
+	public ResponseEntity<?> getCustomBookDetailsById(@PathVariable Long bookId){
+		BookCustomResponseDto customBookDetailsById = bookService.getCustomBookDetailsById(bookId);
+		return ResponseEntity.ok(customBookDetailsById);
+	}
+	
 	//get book list based on array of book ids
-	@GetMapping("/by-ids")
+	@GetMapping("/public/by-ids")
 	public ResponseEntity<?> getBookListByIdArray(@RequestParam List<Long> bookIds){
 		List<BookResponseDto> books = bookService.getBookListByIdArray(bookIds);
 		return ResponseEntity.ok(books);
@@ -144,7 +151,7 @@ public class BookController {
 	 * failure - SC 404
 	 */
 
-	@GetMapping("/search")
+	@GetMapping("/public/search")
 	public ResponseEntity<?> searchBooks(
 			@RequestParam(required = false) String title,
 			@RequestParam(required = false) String description,
@@ -161,7 +168,7 @@ public class BookController {
 	// Fetch books by label, category, subcategory
 	// Example Api call: /books/filter?category=Fiction&subCategory=Dystopian
 
-	@GetMapping("/filter")
+	@GetMapping("/public/filter")
 
 	public ResponseEntity<BookFilterResponseDTO> filterBooks(@ModelAttribute BookFilterRequestDto filterRequest) {
 		BookFilterResponseDTO books = bookService.filterBooks(filterRequest);
