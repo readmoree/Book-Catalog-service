@@ -69,4 +69,7 @@ public class Book extends BaseEntity {
 	@Column(columnDefinition = "decimal(5,2) DEFAULT 0.0")
 	private double discount;
 	
+	@Column(name="total_available_count", nullable = false)
+	private Long totalAvailableCount;
+	
 }

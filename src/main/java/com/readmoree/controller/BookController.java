@@ -17,6 +17,7 @@ import com.readmoree.dtos.BookFilterRequestDto;
 import com.readmoree.dtos.BookFilterResponseDTO;
 import com.readmoree.dtos.BookRequestDto;
 import com.readmoree.dtos.BookResponseDto;
+import com.readmoree.dtos.BookUpdateDto;
 import com.readmoree.entities.Labels;
 import com.readmoree.service.BookService;
 
@@ -53,7 +54,6 @@ public class BookController {
 		List<BookResponseDto> allBookList=bookService.getAllBooks();
 
 		return ResponseEntity.ok(allBookList);
-
 	}
 
 	// get a particular book by id
@@ -64,7 +64,7 @@ public class BookController {
 	}
 
 	//get book details: for admin
-	@GetMapping("/public/order/{bookId}")
+	@GetMapping("/public/details/{bookId}")
 	public ResponseEntity<?> getCustomBookDetailsById(@PathVariable Long bookId){
 		BookCustomResponseDto customBookDetailsById = bookService.getCustomBookDetailsById(bookId);
 		return ResponseEntity.ok(customBookDetailsById);
@@ -132,11 +132,10 @@ public class BookController {
 	 */
 
 	@PutMapping("/admin/update/{bookId}")
-	public ResponseEntity<?> updateBook(@PathVariable Long bookId, @RequestBody @Valid BookRequestDto bookDto){
+	public ResponseEntity<?> updateBook(@PathVariable Long bookId, @RequestBody @Valid BookUpdateDto bookDto){
 		return ResponseEntity.ok(bookService.updateBook(bookId, bookDto));
 
 	}
-
 
 	// find List of books by - author name, title, description, ISBN 
 	/**
@@ -153,27 +152,41 @@ public class BookController {
 
 	@GetMapping("/public/search")
 	public ResponseEntity<?> searchBooks(
-			@RequestParam(required = false) String title,
-			@RequestParam(required = false) String description,
-			@RequestParam(required = false) String isbn,
-			@RequestParam(required = false) String firstName,
-			@RequestParam(required = false) String lastName) {
-
-		List<BookResponseDto> books = bookService.searchBooks(title, description, isbn, firstName, lastName);
-
+			@RequestParam String searchKeyword) {
+		BookFilterResponseDTO books = bookService.searchBooks(searchKeyword);
 		return ResponseEntity.ok(books);
-
 	}
-
+	
+	//get all labels
+	 @GetMapping("/admin/labels")
+	 public ResponseEntity<?> getAllLabels(){
+	  		List<Labels> allLabels = bookService.getAllLabels();
+	  		return ResponseEntity.ok(allLabels);
+	 }
+	 
+	
+	//get category by label
+	 @GetMapping("/admin/categories/{label}")
+	 public ResponseEntity<?> getAllCategoryByLable(@PathVariable Labels label){
+		 List<String> allCategoriesByLabel = bookService.getAllCategoriesByLabel(label);
+		 return ResponseEntity.ok(allCategoriesByLabel);
+	 }
+	
+	//get all subcategory by category and label
+	 @GetMapping("/admin/subCategories/{label}/{category}")
+	 public ResponseEntity<?> getAllSubCategoryByLableAndCAtegory(@PathVariable Labels label,@PathVariable String category){
+		 List<String> allSubCategoriesByCategoryAndLabel = bookService.getAllSubCategoriesByCategoryAndLabel(label, category);
+		 return ResponseEntity.ok(allSubCategoriesByCategoryAndLabel);
+	 }
+	
 	// Fetch books by label, category, subcategory
 	// Example Api call: /books/filter?category=Fiction&subCategory=Dystopian
-
 	@GetMapping("/public/filter")
-
 	public ResponseEntity<BookFilterResponseDTO> filterBooks(@ModelAttribute BookFilterRequestDto filterRequest) {
 		BookFilterResponseDTO books = bookService.filterBooks(filterRequest);
 		return ResponseEntity.ok(books);
 	}
+
 	
 	public ResponseEntity<BookFilterResponseDTO> filterBooks(
 	        @RequestParam(required = false) String label,
@@ -182,10 +195,8 @@ public class BookController {
 	    
 	    // Decode and replace '%20' with spaces for all parameters
 		if (label != null) {
-	        label = label.replace("%20", "").replace(" ", "").trim();  // Remove spaces after replacing '%20' for label
+	        label = label.replace("%20", "").trim().replace(" ", "").toUpperCase();  // Remove spaces after replacing '%20' for label
 	    }
-		System.out.println(label);
-	    
 	    if (category != null) {
 	        category = category.replace("%20", " ");  // Replace '%20' with space for category
 	    }
@@ -193,15 +204,13 @@ public class BookController {
 	    if (subcategory != null) {
 	        subcategory = subcategory.replace("%20", " ");  // Replace '%20' with space for subcategory
 	    }
-	    System.out.println("AFTER PRCOESSING");
-
+	   
 	    // Convert the label to uppercase to match enum names
 	    Labels labelEnum = null;
 	    if (label != null) {
 	        try {
 	        	System.out.println(label.toUpperCase());
 	            labelEnum = Labels.valueOf(label.toUpperCase()); // Convert to uppercase to match enum names
-	            System.out.println(labelEnum);
 	        } catch (IllegalArgumentException e) {
 	            return ResponseEntity.badRequest().body(null); // Handle invalid enum values
 	        }

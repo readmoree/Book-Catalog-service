@@ -33,7 +33,7 @@ public class SecurityConfig {
 		.csrf(customizer -> customizer.disable())
 		.authorizeHttpRequests(request -> 
         request.requestMatchers("/book/search",
-        		"/book/filter","/book/by-ids?**","/book/all","/reviews/book/**",
+        		"/book/filter","/book/by-ids?**","/book/public/all","/reviews/book/**",
         		"/swagger-ui/**",
                 "/v3/api-docs/**",
                 "/swagger-ui.html",
@@ -43,7 +43,7 @@ public class SecurityConfig {
         	
        .requestMatchers("/reviews/customer/**")
        .hasRole("CUSTOMER")
-       .requestMatchers("/admin/**")
+       .requestMatchers("/book/admin/**","/publisher/admin/**","/author/admin/add")
        .hasRole("ADMIN")        		
         .anyRequest().authenticated())  
   //    .httpBasic(Customizer.withDefaults()) - replacing it by custom JWT filter

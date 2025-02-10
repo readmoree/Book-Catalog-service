@@ -7,6 +7,5 @@ public enum Labels {
 	CHILDREN,
 	YOUNGADULTS,
 	COMICSGRAPHICS,
-	LANGUAGES,         
-                            
+	LANGUAGES,                                   
 }

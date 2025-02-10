@@ -54,6 +54,8 @@ public class BookRequestDto {
 	
 	private double discount;
 	
+	private Long totalAvailableCount;
+	
 	private List<BookMappingRequestDto> bookMappings;
 	
 

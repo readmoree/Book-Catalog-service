@@ -8,16 +8,16 @@ import com.readmoree.dtos.BookFilterRequestDto;
 import com.readmoree.dtos.BookFilterResponseDTO;
 import com.readmoree.dtos.BookRequestDto;
 import com.readmoree.dtos.BookResponseDto;
+import com.readmoree.dtos.BookUpdateDto;
+import com.readmoree.entities.Labels;
 
 public interface BookService {
 
 	ApiResponse addBook(BookRequestDto bookDto);
 
-	ApiResponse updateBook(Long bookId, BookRequestDto bookDto);
+	ApiResponse updateBook(Long bookId, BookUpdateDto bookDto);
 
-//	List<BookResponseDto> findBook(String searchQuery);
-
-	List<BookResponseDto> searchBooks(String title, String firstName, String lastName, String description, String isbn);
+	BookFilterResponseDTO searchBooks(String searchKeyword);
 
 	boolean deleteBookById(Long bookId);
 
@@ -30,5 +30,10 @@ public interface BookService {
 	public BookFilterResponseDTO filterBooks(BookFilterRequestDto filterRequest);
 
 	BookCustomResponseDto getCustomBookDetailsById(Long bookId);
-
+	
+	List<Labels> getAllLabels();
+	
+	List<String> getAllCategoriesByLabel(Labels label);
+	
+	List<String> getAllSubCategoriesByCategoryAndLabel(Labels label, String category);
 }

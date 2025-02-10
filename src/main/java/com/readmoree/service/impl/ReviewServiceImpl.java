@@ -1,6 +1,7 @@
 package com.readmoree.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -52,14 +53,28 @@ public class ReviewServiceImpl implements ReviewService {
 	@Override
 	public ApiResponse addreview(Integer customerId, Long bookId, ReviewRequestDto reviewRequestDto) {
 
-		//validate user by calling user-service
-
-		//validate Book
 		Book book = validateBook(bookId);
-
-		//entity to dto
-//		BookResponseDto bookResponseDto = modelMappper.map(book, BookResponseDto.class);
-
+		
+		//check if review by a customer on a book id alread exists in db.
+//		List<ReviewResponseDto> allReviewsOnBookByCustomer = getAllReviewsOnBookByCustomer(customerId, bookId);
+//		
+//		if(allReviewsOnBookByCustomer.isEmpty()) {
+//			//convert reviewDto to entity
+//			Review review = modelMappper.map(reviewRequestDto, Review.class);
+//			review.setCustomerId(customerId);
+//			review.setBook(book);
+//
+//			Review savedReview = reviewDao.save(review);
+//
+//			//ReviewResponseDto reviewResponseDto = modelMappper.map(savedReview, ReviewResponseDto.class);
+//
+//			return new ApiResponse("Review added!", convertToDto(savedReview));
+//			
+//		}
+//		else {
+//			// return new ApiResponse("You can add review on a book only once ");
+//		}
+	
 		//convert reviewDto to entity
 		Review review = modelMappper.map(reviewRequestDto, Review.class);
 		review.setCustomerId(customerId);
@@ -119,12 +134,23 @@ public class ReviewServiceImpl implements ReviewService {
 	public List<ReviewResponseDto> getAllReviewsByCustomer(Integer customerId) {
 		//validate user
 		
+		
+		
 		List<Review> reviewsByCustomerId = reviewDao.findByCustomerId(customerId);
 		
 
-		return reviewsByCustomerId.stream()
+		 List<ReviewResponseDto> reviewResponseDto = reviewsByCustomerId.stream()
 				.map(review->convertToDto(review))
 				.collect(Collectors.toList());
+		 
+		 for(Review review: reviewsByCustomerId) {
+			 for(ReviewResponseDto reviewResponse: reviewResponseDto) {
+				 reviewResponse.setAuthorName(review.getBook().getAuthor().getFirstName()+" "+review.getBook().getAuthor().getLastName());
+			 }
+		 }
+		 
+		 return reviewResponseDto;
+		
 	}
 
 	@Override

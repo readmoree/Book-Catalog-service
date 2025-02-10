@@ -21,6 +21,9 @@ public enum Language {
     TELUGU,
     MALAY,
     DUTCH,
+    MARATHI,
+    GUJRATI,
+    MALAYALAM,
     SWAHILI;
 
 }

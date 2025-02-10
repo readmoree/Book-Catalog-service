@@ -19,8 +19,7 @@ import jakarta.annotation.PostConstruct;
 public class JwtUtils {
 
 	@Value("${spring.security.jwt.secret.key}")
-	private String jwtSecret ="fa65159d9dbc22f99ac702ea3d5c89087279420471d8acde3dbab5360c7d74a95f691eff49cfce90b16277b1a06035432e8c392198bf88bcf520ad88eb2a4d9aa56bddeb3e2f04f29f06beca867bd7c4cdb304d97836c06c960356aaa219750306a540fce2e499f9c100bcd171fa3e2eacf73e6c3ee73f0d9846da00392e6dbcc74737b9fa9215ed2c8e55067645fbc71dfecdd74135606bd64d14f1600beb9d99434bffdd83290b8528b02886a7496b2f4b98e54d196bb1201a71186baa8372f494ff30ab452a7158a21d48b90f1f28b57c490cdb46d43398a23e46862fc87a38e98f68f1c8706f6e354a258913ff67cd693a7d8069a8a732c01d7c5b6d2722";
-
+	private String jwtSecret;
 	//private  Key key;
 
 	@PostConstruct
@@ -29,8 +28,6 @@ public class JwtUtils {
 		if (jwtSecret == null || jwtSecret.isEmpty()) {
 	        throw new IllegalArgumentException("JWT secret key cannot be null or empty");
 	    }
-//	    key = new SecretKeySpec(jwtSecret.getBytes(), SignatureAlgorithm.HS256.getJcaName());
-//		System.out.println("secret key : "+ key);
 	}
 	
 

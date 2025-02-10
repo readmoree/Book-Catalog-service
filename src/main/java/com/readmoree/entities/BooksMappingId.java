@@ -17,6 +17,7 @@ public class BooksMappingId implements Serializable {
     private Long bookId;
 
     @Enumerated(EnumType.STRING)
+    @Column(length=100)
     private Labels labels;
 
     private String category;

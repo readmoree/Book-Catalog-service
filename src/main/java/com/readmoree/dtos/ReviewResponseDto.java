@@ -22,4 +22,6 @@ public class ReviewResponseDto extends BaseEntity {
 	
 	private int rating;
 	
+	private String authorName;
+	
 }

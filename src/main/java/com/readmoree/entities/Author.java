@@ -19,5 +19,6 @@ public class Author extends BaseEntity {
 	@Column(name="last_name",nullable = false, length=40)
 	private String lastName;
 	
+	@Column(length=1000)
 	private String about;
 }

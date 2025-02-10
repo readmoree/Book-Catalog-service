@@ -1,6 +1,8 @@
 package com.readmoree.security;
 
 import java.io.IOException;
+//import java.util.Enumeration;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,7 +22,8 @@ public class JwtFilter extends OncePerRequestFilter {
 	public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		String path = request.getRequestURI();
-//		System.out.println(path);
+
+//		System.out.println("Request URI: "+path);
 
 //		Enumeration<String> headerNames = request.getHeaderNames();
 //		while (headerNames.hasMoreElements()) {
@@ -32,10 +35,10 @@ public class JwtFilter extends OncePerRequestFilter {
 		//System.out.println("request headers"+ request.getHeaderNames());
 		// 1. Check authorization header from incoming request
 		String authHeader=request.getHeader("Authorization");
-		System.out.println(authHeader);
 
 		 if (path.startsWith("/swagger-ui/") || path.startsWith("/v3/api-docs") || path.startsWith("/book/public") || path.startsWith("/reviews/book") || path.startsWith("/book/public/order")) {
-	            filterChain.doFilter(request, response);
+	         System.out.println("inside allowed paths");   
+			 filterChain.doFilter(request, response);
 	            return;
 	        }
 		
@@ -95,7 +98,6 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
         
-
 		//continue with remaining filter chain.
 		filterChain.doFilter(request, response);
 
