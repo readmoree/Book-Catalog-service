@@ -129,5 +129,6 @@
 					</configuration>
 				</plugin>
 			</plugins>
+			<finalName>book-catalog-management-service</finalName>
 		</build>
 </project>
