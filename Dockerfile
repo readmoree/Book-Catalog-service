@@ -1,5 +1,11 @@
+FROM maven:4.0.0-eclipse-temurin-17 AS build
+
+COPY . .
+RUN mvn clean package -DskipTests
+
 # Use the official OpenJDK 17 image as base
-FROM openjdk:17
+FROM openjdk:17-jdk-slim
+
 
 # Set the working directory inside the container
 
