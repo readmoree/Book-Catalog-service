@@ -25,7 +25,7 @@ import lombok.AllArgsConstructor;
 @RestController
 @RequestMapping("/reviews")
 @AllArgsConstructor
-@CrossOrigin(origins = "http://0.0.0.0:3000")
+@CrossOrigin(origins = "*")
 public class ReviewController {
 	
 	private ReviewService reviewService;
