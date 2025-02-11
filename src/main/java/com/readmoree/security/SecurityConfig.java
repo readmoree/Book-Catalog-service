@@ -61,7 +61,7 @@ public class SecurityConfig {
 		 UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		    CorsConfiguration config = new CorsConfiguration();
 
-		    config.setAllowedOrigins(List.of("*")); // Set allowed origins
+		    config.setAllowedOrigins(List.of("https://readmoree.com")); // Set allowed origins
 		    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 		    config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
 		    config.setAllowCredentials(true); // Important for cookies
