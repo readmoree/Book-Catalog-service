@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RestController
 @RequestMapping("/book")
 @AllArgsConstructor
-@CrossOrigin("https://readmoree.com","http://localhost:3000")
+@CrossOrigin(origins = {"https://readmoree.com","http://localhost:3000"})
 public class BookController {
 
 	private BookService bookService;
